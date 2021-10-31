@@ -4,7 +4,7 @@ import { FETCH_ALL, CREATE, UPDATE, DELETE, LIKE } from '../constans/actionTypes
 // Action Creators
 export const getPosts = () => async (dispatch) => {
     try{
-        const { data } = await api.fetchPosts();
+        const { data } = await api.fetchPosts(); // this {data} is comming from database. that is very amazing
 
         dispatch({ type: FETCH_ALL, payload: data });
     } catch (error) {
