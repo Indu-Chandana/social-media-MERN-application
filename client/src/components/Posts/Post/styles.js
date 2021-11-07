@@ -32,6 +32,7 @@ export default makeStyles({
     top: '20px',
     right: '20px',
     color: 'white',
+    background: 'rgba(0, 0, 0, 0.5)',
   },
   grid: {
     display: 'flex',

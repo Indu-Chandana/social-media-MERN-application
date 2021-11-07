@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { AppBar, Typography, Toolbar, Avatar, Button } from '@material-ui/core';
 import { Link, useHistory, useLocation } from 'react-router-dom';
+import decode from 'jwt-decode';
 
 import useStyles from './styles';
 import { useDispatch } from 'react-redux';
@@ -25,6 +26,11 @@ const Navbar = () => {
     const token = user?.token;
 
     // JWT ...
+    if(token) {
+      const decodedToken = decode(token);
+
+      if (decodedToken.exp * 1000 < new Date().getTime()) Logout();
+    }
 
     setUser(JSON.parse(localStorage.getItem('profile')))
   }, [location]) // this location use for when userlogin after user details show using that. when location change after it will call
