@@ -4,12 +4,14 @@ import { Card, CardActions, CardContent, CardMedia, Button, Typography } from '@
 import { ThumbUpAlt, Delete, MoreHoriz, ThumbUpAltOutlined } from '@mui/icons-material';
 import moment from 'moment';
 import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 import { deletePost, likePost } from '../../../actions/posts';
 
 const Post = ({ post, setCurrentId }) => {
     const classes = useStyles();
     const dispatch = useDispatch();
+    const history = useHistory();
     const user = JSON.parse(localStorage.getItem('profile'));
 
     const Likes = () => { //we create in Nov/06
@@ -25,11 +27,13 @@ const Post = ({ post, setCurrentId }) => {
         return <><ThumbUpAltOutlined fontSize="small" />&nbsp;Like</>;
     };
 
+    const openPost = () => history.push(`/posts/${post._id}`);
+
     return (
-        <Card className={classes.card}>
-            <CardMedia className={classes.media} image={post.selectedFile || 'https://images.unsplash.com/photo-1602984338060-bfddce132ebc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1170&q=80'} title={post.title} />
+        <Card className={classes.card} raised elevation={6} >
+            <CardMedia onClick={openPost} className={classes.media} image={post.selectedFile || 'https://images.unsplash.com/photo-1602984338060-bfddce132ebc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1170&q=80'} title={post.title} />
             <div className={classes.overlay}>
-                <Typography variant="h6">{post.name}</Typography>
+                <Typography variant="h6">{post?.name || 'Memo'}</Typography>
                 <Typography variant="body2">{moment(post.createdAt).fromNow()}</Typography>
             </div>
             {(user?.result?.googleId === post?.creator || user?.result?._id === post?.creator) && (

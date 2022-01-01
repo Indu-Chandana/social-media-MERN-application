@@ -3,6 +3,7 @@ import useStyles from './styles'
 import { TextField, Button, Typography, Paper } from '@mui/material';
 import FileBase from 'react-file-base64';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { createPost, updatePost } from '../../actions/posts';
 
 const Form = ({ currentId, setCurrentId }) => {
@@ -10,9 +11,10 @@ const Form = ({ currentId, setCurrentId }) => {
         title: '', message: '', tags: '', selectedFile: ''
     });
     const dispatch = useDispatch();
+    const history = useHistory();
     const classes = useStyles();
     const user = JSON.parse(localStorage.getItem('profile'));
-    const post = useSelector((state) => currentId ? state.posts.find((p) => p._id === currentId) : null);
+    const post = useSelector((state) => currentId ? state.posts.posts.find((p) => p._id === currentId) : null);   // we change second time 1.47.58min in part 4
 
     useEffect(() => {
         if(post) setPostData(post);
@@ -24,7 +26,7 @@ const Form = ({ currentId, setCurrentId }) => {
         if(currentId){
             dispatch(updatePost(currentId, {...postData, name: user?.result?.name }));
         } else {
-            dispatch(createPost({...postData, name: user?.result?.name }));
+            dispatch(createPost({...postData, name: user?.result?.name }, history));
         }
         
         clear();
@@ -45,7 +47,7 @@ const Form = ({ currentId, setCurrentId }) => {
         );
     }
     return (
-        <Paper className={classes.paper}>
+        <Paper className={classes.paper} elevation={6}>
             <form autoComplete="off" noValidate className={`${classes.root} ${classes.form} `} onSubmit={handleSubmit}>
                 <Typography variant="h6">{currentId ? 'Editing' : 'Creating'} a Memory</Typography>
                 {/* <TextField 
